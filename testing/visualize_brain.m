@@ -14,11 +14,14 @@ V_3 = nii_read_volume('data/set_train/train_153.nii');   % not sick
 V_4 = nii_read_volume('data/set_train/train_208.nii');  % not sick
 i = 1;
 
-block = [V_1(:,:,i), V_2(:,:,i); V_3(:,:,i), V_4(:,:,i)];
-[L,NumLabels] = superpixels3(block,3);
+block = [V_1];
 
 while true
-    l = L(:,:,i);
+    slice = V_1(:,:,i);
+    [th, m] = multithresh(slice, 2);
+    m
+    l = imquantize(slice, th);
+    
     imshow(label2rgb(l));
     
     %imshow(imrotate(block(:,:,i), 270),[]);
