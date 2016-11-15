@@ -4,6 +4,11 @@ function [ X ] = generate_X(folder, fun, parameters)
 %Resulting X matrix is of size #data_points x (#features + 1)
 files = dir(folder);
 
+
+h = waitbar(0,'Evaluating...');
+count = 0;
+totcount = length(files);
+
 % iterate through files in folder
 for file = files'
     file_name = file.name;
@@ -25,6 +30,11 @@ for file = files'
     f = str2func(fun);
     x = f(path_name, parameters);
     X(file_number, :) = x;
+    
+    % Show waitbar
+    count = count+1;
+    waitbar(count/totcount);
 end
+close(h)
 end
 
