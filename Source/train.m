@@ -16,13 +16,11 @@ y = csvread(y_file);
 % generates #datapoints x (#features) data matrix
 X = generate_X(x_folder, fun, parameters); 
 
-% crossvalidate
+% creates linear model
 model = fitcensemble(X,y,'OptimizeHyperparameters','auto',...
     'HyperparameterOptimizationOptions',struct('AcquisitionFunctionName',...
     'expected-improvement-plus', 'Kfold', 10));
 
+% crossvalidate
 cv_model = crossval(model);
 CV = kfoldfun(cv_model, 'crossvalidation');
-
-% creates linear model
-model = LinearModel.fit(X,y, 'RobustOpts', 'on', 'Weights', w);
