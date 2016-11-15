@@ -17,7 +17,10 @@ y = csvread(y_file);
 X = generate_X(x_folder, fun, parameters); 
 
 % crossvalidate
-model = fitensemble(X,y,'AdaBoostM1',100,'Tree');
+model = fitcensemble(X,y,'OptimizeHyperparameters','auto',...
+    'HyperparameterOptimizationOptions',struct('AcquisitionFunctionName',...
+    'expected-improvement-plus', 'Kfold', 10));
+
 cv_model = crossval(model);
 CV = kfoldfun(cv_model, 'crossvalidation');
 
