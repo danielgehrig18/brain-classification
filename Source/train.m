@@ -17,10 +17,13 @@ y = csvread(y_file);
 X = generate_X(x_folder, fun, parameters); 
 
 % creates linear model
-model = fitcensemble(X,y,'OptimizeHyperparameters','auto',...
+% TODO: modify fitcensemble parameters to customize CV
+% TODO: extract parameters from optimized model to generate model manually
+% TODO: optimize other parameters in fitcensemble (´auto´, ´gridsearch´)
+model = fitcensemble(X,y,'OptimizeHyperparameters','auto',... 
     'HyperparameterOptimizationOptions',struct('AcquisitionFunctionName',...
     'expected-improvement-plus', 'Kfold', 10));
 
 % crossvalidate
-cv_model = crossval(model);
+cv_model = crossval(model); % TODO: way to pass model function and parameters
 CV = kfoldfun(cv_model, 'crossvalidation');
