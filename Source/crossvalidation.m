@@ -1,9 +1,13 @@
-function [ testvals ] = crossvalidation(CMP,Xtrain,Ytrain,Wtrain,Xtest,Ytest,Wtest)
+function [ testvals ] = crossvalidation(Xtrain,ytrain, Xtest,ytest)
 %CROSSVALIDATION Summary of this function goes here
 %   Detailed explanation goes here
-Yfit = predict(CMP, Xtest);
 
-testvals = mean(Ytest * log(Yfit) + (1 - Ytest) * log(1 - Yfit));
+m = fitcsvm(Xtrain, ytrain, 'KernelFunction','RBF', 'KernelScale','auto');
+[~,scores] = predict(m, Xtest);
+yfit = 1 ./ (1 + exp(-scores(:, 2)));
+
+testvals = -mean(ytest .* log(yfit) + (1 - ytest) .* log(1 - yfit));
 
 end
+
 
