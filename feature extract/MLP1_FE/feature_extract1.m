@@ -12,6 +12,13 @@ else
     error('Wrong input data: path_name must be string or matrix')
 end
 
+xp = parameters.xp;
+yp = parameters.yp;
+zp = parameters.zp;
+
+% Size reduction
+im = redImSize(im,xp,yp,zp);
+
 [x,y,z] = size(im);
 
 % parameters
@@ -30,7 +37,8 @@ z_regions(1) = z_regions(1)+1;
 
 
 % feature vector
-feature_vec = zeros(1,x_segments*y_segments*z_segments);
+totc = x_segments*y_segments*z_segments;
+feature_vec = zeros(1,totc);
 
 % Initzialize count variable
 count = 0;
@@ -44,17 +52,24 @@ for x_i = 1:x_segments
                        y_regions(y_i):y_regions(y_i + 1),...
                        z_regions(z_i):z_regions(z_i + 1));
             
-            % take mean of intensity in chunk       
-            m = mean(chunk(:)); 
+            % take mean and standard deviation of intensity in chunk 
+            [xc,yc,zc] = size(chunk);
+            parameters2 = struct('xp',xc,'yp',yc,'zp',zc,'levels',parameters.levels,'dir',parameters.dir);
+            feature_vec(:,count) = feature_extract_lab1(chunk,parameters2);
+%             m = mean(chunk(:)); 
+%             s = std(double(chunk(:)));
 %             if m~=0
 %                 % Save mean if not equal to 0
 %                 feature_mat(x_i,y_i,z_i) = m;
 %             end
-            feature_vec(count) = m;
+%             feature_vec(1,count) = m;
+%             feature_vec(2,count) = s;
+
         end
     end
 end
 
+% feature = [feature_vec(1,:) feature_vec(2,:) feature_vec(3,:)];
 feature = feature_vec;
 % Create feature array, only save non zero values
 % -> not valid, as every feature vector must have the same number of
