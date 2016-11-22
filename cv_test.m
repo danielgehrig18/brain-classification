@@ -17,11 +17,19 @@ end
 y = csvread('targets.csv');
 
 %%
-model = fitcensemble(X,y,'OptimizeHyperparameters','auto',...
-    'HyperparameterOptimizationOptions',struct('AcquisitionFunctionName',...
-    'expected-improvement-plus', 'MaxObjectiveEvaluations', 30, 'SaveIntermediateResults', 0, 'Verbose', 1, 'ShowPlots', 1, 'Kfold', 20));
+for s = 2:10    
+    for b = 2:5
+        X_path = ['Xs/X_' num2str(s) '_' num2str(b) '.mat'];
+        x_struct = load(X_path);
+        X = x_struct.X;
+        
+        model = fitcensemble(X,y,'OptimizeHyperparameters','auto',...
+            'HyperparameterOptimizationOptions',struct('AcquisitionFunctionName',...
+            'expected-improvement-plus', 'MaxObjectiveEvaluations', 30, 'SaveIntermediateResults', 0, 'Verbose', 1, 'ShowPlots', 1, 'Kfold', 20));
 
-save(model, 'models/model.mat');
+        save(model, ['models/model_' num2str(s) '_' num2str(b) '.mat']);
+    end
+end
 %%
 cv_model = crossval(model); % TODO: way to pass model function and parameters
 is = .1:.1:1;
