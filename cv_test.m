@@ -27,7 +27,7 @@ for s = 2:10
             'HyperparameterOptimizationOptions',struct('AcquisitionFunctionName',...
             'expected-improvement-plus', 'MaxObjectiveEvaluations', 30, 'SaveIntermediateResults', 0, 'Verbose', 1, 'ShowPlots', 1, 'Kfold', 20));
 
-        save(model, ['models/model_' num2str(s) '_' num2str(b) '.mat']);
+        save(['models/model_' num2str(s) '_' num2str(b) '.mat'], 'model');
     end
 end
 %%
