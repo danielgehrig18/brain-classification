@@ -1,6 +1,6 @@
 %%
 for s = 2:10    
-    for b = 2:5
+    for b = 6:8
         % choose function and its parameters
         fun = 'MLP2_feature_extract3'; % TODO: modify function
         parameters = struct('x_segments', s, ... % TODO: optimize parameters through CV
