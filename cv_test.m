@@ -1,18 +1,25 @@
-%% choose function and its parameters
-fun = 'MLP2_feature_extract3'; % TODO: modify function
-parameters = struct('x_segments', 9, ... % TODO: optimize parameters through CV
-                    'y_segments', 9, ...
-                    'z_segments', 9, ...
-                    'bins',3);
-                
-X = generate_X('data/set_train', fun, parameters);
+%%
+for s = 2:10    
+    for b = 2:5
+        % choose function and its parameters
+        fun = 'MLP2_feature_extract3'; % TODO: modify function
+        parameters = struct('x_segments', s, ... % TODO: optimize parameters through CV
+                            'y_segments', s, ...
+                            'z_segments', s, ...
+                            'bins',b);
+
+        X = generate_X('data/set_train', fun, parameters);
+        save(['Xs/X_' num2str(s) '_' num2str(b) '.mat'], 'X'); 
+    end
+end
+
 %%
 y = csvread('targets.csv');
 
 %%
 model = fitcensemble(X,y,'OptimizeHyperparameters','auto',...
     'HyperparameterOptimizationOptions',struct('AcquisitionFunctionName',...
-    'expected-improvement-plus', 'MaxObjectiveEvaluations', 100, 'SaveIntermediateResults', 0, 'Verbose', 1, 'ShowPlots', 1, 'Kfold', 20));
+    'expected-improvement-plus', 'MaxObjectiveEvaluations', 30, 'SaveIntermediateResults', 0, 'Verbose', 1, 'ShowPlots', 1, 'Kfold', 20));
 
 save(model, 'models/model.mat');
 %%
