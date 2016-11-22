@@ -7,7 +7,7 @@ files = dir(folder);
 
 h = waitbar(0,'Evaluating...');
 count = 0;
-totcount = length(files);
+totcount = length(files)-2;
 
 % iterate through files in folder
 for file = files'
