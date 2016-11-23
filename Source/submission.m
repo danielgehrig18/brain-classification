@@ -16,10 +16,10 @@ function [y_hat] = submission( folder, file, model,  fun, parameters)
 X = generate_X(folder, fun, parameters);
 
 % calculate the test targets
-y_hat = predict(model, X); 
+[~,y_hat] = predict(model, X); 
+y_hat = y_hat(:,2);
 
-
-% check if there is already a file with name 'submit.csv', if so delete it
+%% check if there is already a file with name 'submit.csv', if so delete it
 if exist(file, 'file') == 2
     delete(file);
 end

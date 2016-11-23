@@ -16,11 +16,19 @@ y = csvread(y_file);
 % generates #datapoints x (#features) data matrix
 X = generate_X(x_folder, fun, parameters); 
 
-% crossvalidate
-model = fitensemble(X,y,'AdaBoostM1',100,'Tree');
-cv_model = crossval(model);
-CV = kfoldfun(cv_model, 'crossvalidation');
-
 % creates linear model
+<<<<<<< HEAD
 model = LinearModel.fit(X,y, 'RobustOpts', 'on', 'Weights', w);
 end
+=======
+% TODO: modify fitcensemble parameters to customize CV
+% TODO: extract parameters from optimized model to generate model manually
+% TODO: optimize other parameters in fitcensemble (´auto´, ´gridsearch´)
+model = fitcensemble(X,y,'OptimizeHyperparameters','auto',... 
+    'HyperparameterOptimizationOptions',struct('AcquisitionFunctionName',...
+    'expected-improvement-plus', 'Kfold', 10));
+
+% crossvalidate
+cv_model = crossval(model); % TODO: way to pass model function and parameters
+CV = kfoldfun(cv_model, 'crossvalidation');
+>>>>>>> f83786522962ef707dce42d732a2a1f0900438ff
