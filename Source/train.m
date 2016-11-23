@@ -23,3 +23,4 @@ CV = kfoldfun(cv_model, 'crossvalidation');
 
 % creates linear model
 model = LinearModel.fit(X,y, 'RobustOpts', 'on', 'Weights', w);
+end
