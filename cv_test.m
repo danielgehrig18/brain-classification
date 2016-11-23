@@ -1,4 +1,32 @@
 %%
+is = .2:.2:2;
+global s b i 
+for s=2:10
+    for b=2:5
+        ms = [];
+        std = [];
+        model_s = load(['models/model_' num2str(s) '_' num2str(b) '.mat']);
+        model = model_s.model;
+            
+        cv_model = crossval(model); % TODO: way to pass model function and parameters
+            
+        for i=is
+            CV = kfoldfun(cv_model, @crossvalidation);
+            m = mean(CV);
+            ms = [ms, m];
+            std = [std, mean((CV-m).^2)^.5];
+        end
+        
+        save(['ms/ms_' num2str(s) '_' num2str(b) '.mat'], 'ms');
+        save(['stds/std_' num2str(s) '_' num2str(b) '.mat'], 'std');
+        disp(['saved for params: b = ' num2str(b) ' and s = ' num2str(s)]);
+    end
+end
+
+
+
+
+%%
 for s = 2:10    
     for b = 2:5
         % choose function and its parameters
@@ -31,7 +59,7 @@ for s = 2:10
     end
 end
 %%
-is = .1:.2:2;
+is = .2:.2:2;
 ms = [];
 std = [];
 global s b i 
