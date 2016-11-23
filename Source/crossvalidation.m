@@ -2,7 +2,12 @@ function [ testvals ] = crossvalidation(CMP,Xtrain,ytrain,Wtrain,Xtest,ytest,Wte
 %CROSSVALIDATION Summary of this function goes here
 %   Detailed explanation goes here
 
-m = load('models/model.mat');
+    s = load('s.mat');
+    s = s.s;
+    b = load('b.mat');
+    b = b.b;
+    
+m = load(['models/model_' num2str(s) '_' num2str(b) '.mat']);
 m = m.model;
 % template tree parameters
 tree = m.ModelParameters.LearnerTemplates{1};
@@ -19,7 +24,7 @@ yfit = scores(:,2);
 
 if ~isempty(find(yfit < 0 | yfit > 1))
     i = load('i.mat');
-    i.i
+%     i.i
     yfit = 1 ./ (1 + exp(-i.i*yfit));
 end
 

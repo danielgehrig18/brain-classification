@@ -31,14 +31,28 @@ for s = 2:10
     end
 end
 %%
-cv_model = crossval(model); % TODO: way to pass model function and parameters
-is = .1:.1:1;
-ms = [];
-ss = [];
-for i=.1:.1:1
-    save('i.mat', 'i');
-    i
-    CV = kfoldfun(cv_model, @crossvalidation);
-    m = [m, mean(CV)];
-    s = [s, mean((CV-m(end)).^2)^.5];
+
+for s = 2:10    
+    for b = 9:10
+        model = load(['models/model_' num2str(s) '_' num2str(b) '.mat']);
+         model = model.model;
+        cv_model = crossval(model); % TODO: way to pass model function and parameters
+%         is = .1:.1:1;
+        
+        for i=.1:.1:1
+            save('i.mat', 'i');
+            save('s.mat', 's');
+            save('b.mat', 'b');
+            CV = kfoldfun(cv_model, @crossvalidation);
+
+            m = mean(CV);
+            ss = mean((CV-m(end)).^2)^.5;
+            
+            result = [s, b, i, m, ss];
+            
+            disp(['For s = ' num2str(s) ' b = ' num2str(b) ' i = ' num2str(i) ' -- m = ' num2str(mean(CV)) ' -- ss = ' num2str(mean((CV-m(end)).^2)^.5)])
+            
+        end
+    end
 end
+save('result.mat', 'result');
