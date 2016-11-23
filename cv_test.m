@@ -35,10 +35,10 @@ cv_model = crossval(model); % TODO: way to pass model function and parameters
 is = .1:.2:2;
 ms = [];
 std = [];
+global s b i 
 for s=2:10
     for b=2:5
         for i=is
-            global s b i 
             CV = kfoldfun(cv_model, @crossvalidation);
             ms = [ms, mean(CV)];
             std = [std, mean((CV-m(end)).^2)^.5];
