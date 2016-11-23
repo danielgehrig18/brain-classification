@@ -1,6 +1,7 @@
 function [ testvals ] = crossvalidation(CMP,Xtrain,ytrain,Wtrain,Xtest,ytest,Wtest)
 %CROSSVALIDATION Summary of this function goes here
 %   Detailed explanation goes here
+global s b i
 load_path = ['models/model_' num2str(s) '_' num2str(b) '.mat'];
 
 m = load(load_path);
