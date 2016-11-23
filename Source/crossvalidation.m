@@ -13,7 +13,7 @@ tree = m.ModelParameters.LearnerTemplates{1};
 % get parameters 
 n_learn = m.ModelParameters.NLearn;
 method = m.ModelParameters.Method;
-if ~strcmp(method, 'Bagging')
+if ~strcmp(method, 'Bag')
     learning_rate = m.ModelParameters.LearnRate;
     m = fitcensemble(Xtrain, ytrain, 'Method', method, 'NumLearningCycles', n_learn, 'LearnRate', learning_rate, 'Learners', tree); 
 else
@@ -24,7 +24,7 @@ end
 
 yfit = scores(:,2);
 
-if ~strcmp(method, 'Bagging')
+if ~strcmp(method, 'Bag')
     yfit = 1 ./ (1 + exp(-i*yfit));
 end
 
