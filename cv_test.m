@@ -1,7 +1,7 @@
 %%
 is = .2:.2:2;
 global s b i 
-for s=2:10
+for s=3:10
     for b=2:5
         ms = [];
         std = [];
@@ -19,7 +19,7 @@ for s=2:10
         
         save(['ms/ms_' num2str(s) '_' num2str(b) '.mat'], 'ms');
         save(['stds/std_' num2str(s) '_' num2str(b) '.mat'], 'std');
-        disp(['saved for params: b = ' num2str(b) ' and s = ' num2str(s)]);
+        disp(['saved for params: b = ' num2str(b) ' and s = ' num2str(s) ' and method ' model.Method]);
     end
 end
 
