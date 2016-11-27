@@ -17,7 +17,7 @@ y = csvread(y_file);
 X = generate_X(x_folder, fun, parameters); 
 
 % load classification tree calculated through optimization.
-load('classification_tree.mat');
+t = load('classification_tree.mat');
 
 % train bagging model. Trained through optimization
-model = fitcensemble(X, y, 'Method', 'Bag', 'NumLearningCycles', 11, 'Learners', tree);
+model = fitcensemble(X, y, 'Method', 'Bag', 'NumLearningCycles', 11, 'Learners', t.tree);
