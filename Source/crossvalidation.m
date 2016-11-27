@@ -2,16 +2,14 @@ function [ testvals ] = crossvalidation(CMP,Xtrain,ytrain,Wtrain,Xtest,ytest,Wte
 %CROSSVALIDATION Summary of this function goes here
 %   Detailed explanation goes here
 
-m = load('models/model.mat');
-m = m.model;
+load('model_final.mat');
 % template tree parameters
-tree = m.ModelParameters.LearnerTemplates{1};
+tree = model.ModelParameters.LearnerTemplates{1};
 
 % get parameters 
-n_learn = m.ModelParameters.NLearn;
-learning_rate = m.ModelParameters.LearnRate;
-method = m.ModelParameters.Method;
-m = fitcensemble(Xtrain, ytrain, 'Method', method, 'NumLearningCycles', n_learn, 'LearnRate', learning_rate, 'Learners', tree); 
+n_learn = model.ModelParameters.NLearn;
+method = model.ModelParameters.Method;
+model = fitcensemble(Xtrain, ytrain, 'Method', method, 'NumLearningCycles', n_learn, 'LearnRate', learning_rate, 'Learners', tree); 
 
 [~,scores] = predict(m, Xtest);
 
