@@ -1,5 +1,5 @@
-function [ model, X] = train_b( x_folder, y_file, fun, parameters )
-%TRAIN_B Trains a linear model with Matlab function LinearModel.fit
+function model = train( x_folder, y_file, fun, parameters )
+%TRAIN_B Trains a classification model with Matlab function LinearModel.fit
 %   Args:   x_folder:   folder with all the training data for X
 %           y_file:     file with the training data for y
 %           fun:        function to be used for the feature extraction
@@ -16,9 +16,8 @@ y = csvread(y_file);
 % generates #datapoints x (#features) data matrix
 X = generate_X(x_folder, fun, parameters); 
 
-% construct weighting matrix
-w = histcounts(y,1:100);
-w = w(y);
+% load classification tree calculated through optimization.
+t = load('classification_tree.mat');
 
-% creates linear model
-model = LinearModel.fit(X,y, 'RobustOpts', 'on', 'Weights', w);
+% train bagging model. Trained through optimization
+model = fitcensemble(X, y, 'Method', 'Bag', 'NumLearningCycles', 11, 'Learners', t.tree);
