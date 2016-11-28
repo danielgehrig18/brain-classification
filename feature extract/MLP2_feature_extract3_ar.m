@@ -7,7 +7,10 @@ function [ x ] = MLP2_feature_extract3_ar( path_name, parameters )
 imo = nii_read_volume(path_name);
 
 % Reduce image size
-im = redImSize(imo,0.3,0.3,0.3);
+im = redImSize(imo,0.2,0.2,0.2);
+
+% Filter image
+im = imgaussfilt3(im,2);
 
 [x,y,z] = size(im);
 
