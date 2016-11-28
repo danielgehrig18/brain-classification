@@ -9,13 +9,13 @@ addpath('feature extract', 'Source','ReadData3D_version1k/nii');
 
 %% choose function and its parameters
 fun = 'MLP2_feature_extract2'; % TODO: modify function
-parameters = struct('x_segments', 3, ... % TODO: optimize parameters through CV
+parameters = struct('x_segments', 3, ... % TOO: optimize parameters through CV
                     'y_segments', 3, ...
                     'z_segments', 3, ...
-                    'bins', 40);
+                    'bins', 3);
 
 % train model with Matlab function LinearModel.fit
-[model, cv] = train('data/set_train', 'targets.csv', fun, parameters); % TODO: generate CV                   
+model = train('data/set_train', 'targets.csv', fun, parameters); % TODO: generate CV                   
 
 %% generate submission file from test set and resulting model
 disp('Training finished successfully!');
