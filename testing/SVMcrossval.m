@@ -7,6 +7,7 @@ yc = cvpartition(yd,'k',10);
 
 NoT = yc.NumTestSets;
 SaveLL = zeros(NoT,1);
+sigmoid =@(x,is)(1./(1+exp(-is*x)));
 
 % Do cross-validation
 for i = 1:NoT
@@ -16,10 +17,12 @@ for i = 1:NoT
     % Train model
     % Support vector machine
     model = fitcsvm(X(trainidx,:),yd(trainidx),'Standardize',true,'KernelFunction','rbf',...
-            'BoxConstraint',C,'KernelScale',b,'ScoreTransform','doublelogit');
+            'BoxConstraint',C,'KernelScale',b);
+%   ,'ScoreTransform','doublelogit'
     % Test model
     [~,yhat] = predict(model,X(testidx,:));
     yhat = yhat(:,2);
+    yhat = sigmoid(yhat,2);
     % % find yhat = 0 and = 1, to prevent NaN entries
     idx0 = yhat == 0;
     yhat(idx0) = 0.00001;
