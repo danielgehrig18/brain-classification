@@ -1,8 +1,8 @@
-gehrigd@student.ethz.ch
+﻿gehrigd@student.ethz.ch
 rucklia@student.ethz.ch
 goettgem@student.ethz.ch
 
-﻿Team Name:      Fit happens
+﻿Team Name:      Fit Happens
 
 Team Members:   Daniel Gehrig    
                 Adrian Ruckli   
@@ -13,7 +13,7 @@ Summary of Approach:
 1. - Convert the given raw data to a matrix of size 176x208x176 using a publically 
      available 3D-Data Reader ((c) 2010, Dirk-Jan Kroon).
 
-    - Cut brain image int 3x3x3 chunks of equal size.
+    - Cut brain image into 3x3x3 chunks of equal size.
 
     - Generate an intensity histogram of every chunk using 3 bins.
     
