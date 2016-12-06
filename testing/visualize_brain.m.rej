@@ -1,0 +1,20 @@
+diff a/testing/visualize_brain.m b/testing/visualize_brain.m	(rejected hunks)
+@@ -6,12 +6,14 @@
+ % 191, 195, 197, 198, 203, 206, 207, 219, 221, 226, 230, 242, 243, 250, 
+ % 256, 257, 258, 261, 262, 266, 267 
+ 
++addpath('../ReadData3D_version1k/nii')
++
+ close all
+ 
+-V_1 = nii_read_volume('data/set_train/train_103.nii');   % sick
+-V_2 = nii_read_volume('data/set_train/train_158.nii');  % sick
+-V_3 = nii_read_volume('data/set_train/train_153.nii');   % not sick
+-V_4 = nii_read_volume('data/set_train/train_208.nii');  % not sick
++V_1 = nii_read_volume('../data/set_train/train_103.nii');   % sick
++V_2 = nii_read_volume('../data/set_train/train_158.nii');  % sick
++V_3 = nii_read_volume('../data/set_train/train_153.nii');   % not sick
++V_4 = nii_read_volume('../data/set_train/train_208.nii');  % not sick
+ i = 1;
+ 
+ block = [V_1];
