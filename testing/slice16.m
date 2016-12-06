@@ -11,22 +11,24 @@ switch axdir
     case 'x'
         NoS = floor(x/slices);
         for p = 0:slices-1
+            rgbim = squeeze(im(i+p*NoS,:,:));
 %             [rgbim, ~] = quantgray(squeeze(im(i+p*NoS,:,:)),lev);
-            rgbim = edge(squeeze(im(i+p*NoS,:,:)),'canny',th);
+%             rgbim = edge(squeeze(im(i+p*NoS,:,:)),'canny',th);
             block16{p+1} = rgbim;
         end
     case 'y'
         NoS = floor(y/slices);
         for p = 0:slices-1
-%             [rgbim, ~] = quantgray(squeeze(im(:,i+p*NoS,:)),lev);
-            rgbim = edge(squeeze(im(:,i+p*NoS,:)),'canny',th);
+            [rgbim, ~] = quantgray(squeeze(im(:,i+p*NoS,:)),lev);
+%             rgbim = edge(squeeze(im(:,i+p*NoS,:)),'canny',th);
             block16{p+1} = rgbim;
         end
     case 'z'
         NoS = floor(z/slices);
         for p = 0:slices-1
+            rgbim = squeeze(im(:,:,i+p*NoS));
 %             [rgbim, ~] = quantgray(squeeze(im(:,:,i+p*NoS)),lev);
-            rgbim = edge(squeeze(im(:,:,i+p*NoS)),'prewitt');
+%             rgbim = edge(squeeze(im(:,:,i+p*NoS)),'prewitt');
             block16{p+1} = rgbim;
         end
 end

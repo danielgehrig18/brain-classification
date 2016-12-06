@@ -2,18 +2,24 @@
 
 addpath('../ReadData3D_version1k/nii')
 
-V_1 = nii_read_volume('../data/set_train/train_103.nii');   % sick
-V_2 = nii_read_volume('../data/set_train/train_158.nii');  % sick
+% V_1 = nii_read_volume('../data/set_train/train_103.nii');   % sick
+V_1 = nii_read_volume('../data/set_train/train_158.nii');  % sick
+V_2 = nii_read_volume('../data/set_train/train_153.nii');   % not sick
 % V_2 = nii_read_volume('../data/set_train/train_153.nii');   % not sick
 % V_2 = nii_read_volume('../data/set_train/train_208.nii');  % not sick
-
+%%
 
 % Reduce image size
-xperc = 0.3;
-yperc = 0.3;
-zperc = 0.3;
+xperc = 0.2;
+yperc = 0.2;
+zperc = 0.2;
 V_1r = redImSize(V_1,xperc,yperc,zperc);
 V_2r = redImSize(V_2,xperc,yperc,zperc);
+
+% Filter image
+V_1r = imgaussfilt3(V_1r,2);
+V_2r = imgaussfilt3(V_2r,2);
+
 
 % Choose axis to move along
 [x,y,z] = size(V_1r);

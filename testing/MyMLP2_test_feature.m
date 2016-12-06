@@ -7,7 +7,7 @@ addpath('../data','../testing','../ReadData3D_version1k/nii','../feature extract
 % split: 6x6x6, bins: 60
 % split: 9x9x9, bins: 30
 
-parameters1 = struct('x_segments',4,'y_segments',4,'z_segments',4);
+parameters1 = struct('x_segments',5,'y_segments',5,'z_segments',5);
 % parameters1 = struct('xp',0.2,'yp',0.1,'zp',0.2,'levels',2,'dir','z');
 % parameters1 = struct('x_segments',5,'y_segments',5,'z_segments',5,...
 %     'xp',0.3,'yp',0.3,'zp',0.3,'levels',2,'dir','all');
@@ -16,13 +16,13 @@ hbounds = MLP2_getHistobounds(Xint);
 %%
 
 % train features
-parameters2 = struct('x_segments',4,'y_segments',4,'z_segments',4,'bins',30,'hbounds',hbounds);
+parameters2 = struct('x_segments',5,'y_segments',5,'z_segments',5,'bins',15,'hbounds',hbounds);
 X = generate_X('../data/set_train', 'MLP2_feature_extract3_ar', parameters2);
 
 %%
 
 % % test features -> Check if parameters are equal to the train paras
-parameters2 = struct('x_segments',4,'y_segments',4,'z_segments',4,'bins',30,'hbounds',hbounds);
+parameters2 = struct('x_segments',5,'y_segments',5,'z_segments',5,'bins',10,'hbounds',hbounds);
 Xtest = generate_X('../data/set_test', 'MLP2_feature_extract3_ar', parameters2);
 
 %%
@@ -38,6 +38,13 @@ X2 = X(:,~idxz);
 % Exclude useless features
 idxs = std(X2,[],1) == 0;
 X3 = X2(:,~idxs);
+
+[m,n] = size(X3);
+% Choose 1000 features at random
+selecti = randi(n,700,1);
+X4 = X3(:,selecti);
+
+X10 = [X3(:,870) X3(:,948)];
 
 %%
 X5 = Xtest(:,~idxz);
@@ -75,10 +82,14 @@ X6 = X5(:,~idxs);
 %     'auto','HyperparameterOptimizationOptions',struct('kfold',10));
 
 % betarange = [1:9 10:10:90 100:100:500];
-betarange = [100:10:350];
+% betarange = [100:10:350];
+% betarange = [1 80 200];
+betarange = 1;
 % betarange = [0.1:0.1:0.9 1:9 10];
 % Crange = [10:10:90 1e2:1e2:900 1e3:1e3:1e4];
-Crange = [1e3:1e3:1e4];
+% Crange = linspace(0.01,500,50);
+Crange = [1 10 100];
+% Crange = [1e3:1e3:1e4];
 
 
 % lossfun =@(yd,yhat,w)(-mean(yd.*log(yhat(:,2))+(1-yd).*log(1-yhat(:,2)),1));
@@ -108,7 +119,7 @@ parfor i = 1:length(hypcell)
     b = hypcell{i}(1);
     C = hypcell{i}(2);
 %   [SaveCVLLmean(ib,ic), SaveCVLLstd(ib,ic)] = SVMcrossval(X3,yd,C,b);
-    [SaveCVLLcm{i}, SaveCVLLcs{i}] = SVMcrossval(X3,yd,C,b);
+    [SaveCVLLcm{i}, SaveCVLLcs{i}] = SVMcrossval(X10,yd,C,b);
 %   count = count+1;
 %   waitbar(count/totc);
 end
@@ -125,6 +136,37 @@ SaveCVLLstd = SaveCVLLstd__';
 
 % 
 % 
+%%
+% Plot with fixed C
+k = 3;
+figure(1)
+plot(Crange,SaveCVLLmean(k,:))
+figure(2)
+plot(Crange,SaveCVLLstd(k,:))
+%%
+
+idxsick = yd == 0;
+meansick = mean(X3(idxsick,:),1);
+meanheal = mean(X3(~idxsick,:),1);
+meandiff = abs(meansick-meanheal);
+stdsick = std(X3(idxsick,:),1);
+stdheal = std(X3(~idxsick,:),1);
+stdsum = stdsick+stdheal;
+
+figure(4)
+plot(1:n,meandiff,'b')
+hold on
+plot(1:n,stdsum,'r')
+hold off
+idximp = meandiff > 200;
+
+%%
+figure(3)
+
+scatter(X3(idxsick,870),X3(idxsick,948),'r')
+hold on
+scatter(X3(~idxsick,870),X3(~idxsick,948),'b')
+hold off
 %%
 % 
 % [~,yhat] = predict(model,X);
@@ -189,6 +231,8 @@ xlabel('C')
 % fourth attempt: Exluded zero and useless feature - corrupt
 % Min 1: beta = 60, C = 400, MeanLL = 2.277, StdLL = 
 % Min 2: beta = 10, C = 1e4, MeanLL = 2.237, StdLL = 
+
+
 
 %%
 % Find beta and C index
